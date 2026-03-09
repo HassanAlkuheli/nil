@@ -1,0 +1,3 @@
+ALTER TABLE transactions ADD COLUMN steth_amount TEXT NOT NULL DEFAULT '0';
+
+ALTER TABLE stats ADD COLUMN total_steth_held TEXT NOT NULL DEFAULT '0';
