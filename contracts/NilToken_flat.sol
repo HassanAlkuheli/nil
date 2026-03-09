@@ -1,4 +1,4 @@
-ÿþï»¿// Sources flattened with hardhat v2.28.6 https://hardhat.org
+ï»¿// Sources flattened with hardhat v2.28.6 https://hardhat.org
 
 // SPDX-License-Identifier: MIT
 
@@ -39,6 +39,7 @@ abstract contract Context {
 // Original license: SPDX_License_Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)
 
+pragma solidity ^0.8.20;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -140,6 +141,7 @@ abstract contract Ownable is Context {
 // Original license: SPDX_License_Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.5.0) (interfaces/draft-IERC6093.sol)
 
+pragma solidity >=0.8.4;
 
 /**
  * @dev Standard ERC-20 Errors
@@ -305,6 +307,7 @@ interface IERC1155Errors {
 // Original license: SPDX_License_Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.4.0) (token/ERC20/IERC20.sol)
 
+pragma solidity >=0.4.16;
 
 /**
  * @dev Interface of the ERC-20 standard as defined in the ERC.
@@ -387,6 +390,7 @@ interface IERC20 {
 // Original license: SPDX_License_Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.4.0) (token/ERC20/extensions/IERC20Metadata.sol)
 
+pragma solidity >=0.6.2;
 
 /**
  * @dev Interface for the optional metadata functions from the ERC-20 standard.
@@ -414,6 +418,7 @@ interface IERC20Metadata is IERC20 {
 // Original license: SPDX_License_Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.5.0) (token/ERC20/ERC20.sol)
 
+pragma solidity ^0.8.20;
 
 
 
@@ -718,6 +723,7 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
 // File contracts/NilToken.sol
 
 // Original license: SPDX_License_Identifier: MIT
+pragma solidity ^0.8.28;
 contract NilToken is ERC20, Ownable {
     address public vault;
 
@@ -744,4 +750,5 @@ contract NilToken is ERC20, Ownable {
     function burn(address from, uint256 amount) external onlyVault {
         _burn(from, amount);
     }
-}
+}
+

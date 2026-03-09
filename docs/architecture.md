@@ -5,10 +5,10 @@
 Nil is a collateral vault protocol on Arbitrum Sepolia with **Lido-style yield integration**. Users lock ETH which is routed through a staking contract, receive stETH as collateral, and mint NIL tokens at a 150% collateralization ratio. Collateral earns ~4% APY via the stETH exchange rate. Redeeming NIL returns stETH (not raw ETH).
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌──────────────┐
+┌─────────────┐      ┌──────────────┐     ┌──────────────┐
 │   React UI  │────▶│  Rust / Axum │────▶│   SQLite DB  │
 │  (Vite)     │◀────│  Backend     │◀────│   nil.db     │
-└──────┬──────┘     └──────┬───────┘     └──────────────┘
+└──────┬──────┘      └──────┬───────┘     └──────────────┘
        │                   │
        │   JSON-RPC / WS   │   JSON-RPC (polling)
        ▼                   ▼

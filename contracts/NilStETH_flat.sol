@@ -720,403 +720,61 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
 }
 
 
-// File @openzeppelin/contracts/utils/StorageSlot.sol@v5.6.1
+// File contracts/staking/NilStETH.sol
 
 // Original license: SPDX_License_Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.1.0) (utils/StorageSlot.sol)
-// This file was procedurally generated from scripts/generate/templates/StorageSlot.js.
-
 pragma solidity ^0.8.20;
+contract NilStETH is ERC20, Ownable {
+    address public minter;
+    uint256 public lastRebaseTime;
+    uint256 public deployTime;
+    uint256 public constant DAILY_YIELD = 11;
+    uint256 public constant YIELD_PRECISION = 100000;
 
-/**
- * @dev Library for reading and writing primitive types to specific storage slots.
- *
- * Storage slots are often used to avoid storage conflict when dealing with upgradeable contracts.
- * This library helps with reading and writing to such slots without the need for inline assembly.
- *
- * The functions in this library return Slot structs that contain a `value` member that can be used to read or write.
- *
- * Example usage to set ERC-1967 implementation slot:
- * ```solidity
- * contract ERC1967 {
- *     // Define the slot. Alternatively, use the SlotDerivation library to derive the slot.
- *     bytes32 internal constant _IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
- *
- *     function _getImplementation() internal view returns (address) {
- *         return StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value;
- *     }
- *
- *     function _setImplementation(address newImplementation) internal {
- *         require(newImplementation.code.length > 0);
- *         StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = newImplementation;
- *     }
- * }
- * ```
- *
- * TIP: Consider using this library along with {SlotDerivation}.
- */
-library StorageSlot {
-    struct AddressSlot {
-        address value;
-    }
+    event MinterSet(address indexed minter);
+    event Rebase(uint256 newTotalSupply);
 
-    struct BooleanSlot {
-        bool value;
-    }
-
-    struct Bytes32Slot {
-        bytes32 value;
-    }
-
-    struct Uint256Slot {
-        uint256 value;
-    }
-
-    struct Int256Slot {
-        int256 value;
-    }
-
-    struct StringSlot {
-        string value;
-    }
-
-    struct BytesSlot {
-        bytes value;
-    }
-
-    /**
-     * @dev Returns an `AddressSlot` with member `value` located at `slot`.
-     */
-    function getAddressSlot(bytes32 slot) internal pure returns (AddressSlot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns a `BooleanSlot` with member `value` located at `slot`.
-     */
-    function getBooleanSlot(bytes32 slot) internal pure returns (BooleanSlot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns a `Bytes32Slot` with member `value` located at `slot`.
-     */
-    function getBytes32Slot(bytes32 slot) internal pure returns (Bytes32Slot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns a `Uint256Slot` with member `value` located at `slot`.
-     */
-    function getUint256Slot(bytes32 slot) internal pure returns (Uint256Slot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns a `Int256Slot` with member `value` located at `slot`.
-     */
-    function getInt256Slot(bytes32 slot) internal pure returns (Int256Slot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns a `StringSlot` with member `value` located at `slot`.
-     */
-    function getStringSlot(bytes32 slot) internal pure returns (StringSlot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns an `StringSlot` representation of the string storage pointer `store`.
-     */
-    function getStringSlot(string storage store) internal pure returns (StringSlot storage r) {
-        assembly ("memory-safe") {
-            r.slot := store.slot
-        }
-    }
-
-    /**
-     * @dev Returns a `BytesSlot` with member `value` located at `slot`.
-     */
-    function getBytesSlot(bytes32 slot) internal pure returns (BytesSlot storage r) {
-        assembly ("memory-safe") {
-            r.slot := slot
-        }
-    }
-
-    /**
-     * @dev Returns an `BytesSlot` representation of the bytes storage pointer `store`.
-     */
-    function getBytesSlot(bytes storage store) internal pure returns (BytesSlot storage r) {
-        assembly ("memory-safe") {
-            r.slot := store.slot
-        }
-    }
-}
-
-
-// File @openzeppelin/contracts/utils/ReentrancyGuard.sol@v5.6.1
-
-// Original license: SPDX_License_Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.5.0) (utils/ReentrancyGuard.sol)
-
-pragma solidity ^0.8.20;
-
-/**
- * @dev Contract module that helps prevent reentrant calls to a function.
- *
- * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier
- * available, which can be applied to functions to make sure there are no nested
- * (reentrant) calls to them.
- *
- * Note that because there is a single `nonReentrant` guard, functions marked as
- * `nonReentrant` may not call one another. This can be worked around by making
- * those functions `private`, and then adding `external` `nonReentrant` entry
- * points to them.
- *
- * TIP: If EIP-1153 (transient storage) is available on the chain you're deploying at,
- * consider using {ReentrancyGuardTransient} instead.
- *
- * TIP: If you would like to learn more about reentrancy and alternative ways
- * to protect against it, check out our blog post
- * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].
- *
- * IMPORTANT: Deprecated. This storage-based reentrancy guard will be removed and replaced
- * by the {ReentrancyGuardTransient} variant in v6.0.
- *
- * @custom:stateless
- */
-abstract contract ReentrancyGuard {
-    using StorageSlot for bytes32;
-
-    // keccak256(abi.encode(uint256(keccak256("openzeppelin.storage.ReentrancyGuard")) - 1)) & ~bytes32(uint256(0xff))
-    bytes32 private constant REENTRANCY_GUARD_STORAGE =
-        0x9b779b17422d0df92223018b32b4d1fa46e071723d6817e2486d003becc55f00;
-
-    // Booleans are more expensive than uint256 or any type that takes up a full
-    // word because each write operation emits an extra SLOAD to first read the
-    // slot's contents, replace the bits taken up by the boolean, and then write
-    // back. This is the compiler's defense against contract upgrades and
-    // pointer aliasing, and it cannot be disabled.
-
-    // The values being non-zero value makes deployment a bit more expensive,
-    // but in exchange the refund on every call to nonReentrant will be lower in
-    // amount. Since refunds are capped to a percentage of the total
-    // transaction's gas, it is best to keep them low in cases like this one, to
-    // increase the likelihood of the full refund coming into effect.
-    uint256 private constant NOT_ENTERED = 1;
-    uint256 private constant ENTERED = 2;
-
-    /**
-     * @dev Unauthorized reentrant call.
-     */
-    error ReentrancyGuardReentrantCall();
-
-    constructor() {
-        _reentrancyGuardStorageSlot().getUint256Slot().value = NOT_ENTERED;
-    }
-
-    /**
-     * @dev Prevents a contract from calling itself, directly or indirectly.
-     * Calling a `nonReentrant` function from another `nonReentrant`
-     * function is not supported. It is possible to prevent this from happening
-     * by making the `nonReentrant` function external, and making it call a
-     * `private` function that does the actual work.
-     */
-    modifier nonReentrant() {
-        _nonReentrantBefore();
-        _;
-        _nonReentrantAfter();
-    }
-
-    /**
-     * @dev A `view` only version of {nonReentrant}. Use to block view functions
-     * from being called, preventing reading from inconsistent contract state.
-     *
-     * CAUTION: This is a "view" modifier and does not change the reentrancy
-     * status. Use it only on view functions. For payable or non-payable functions,
-     * use the standard {nonReentrant} modifier instead.
-     */
-    modifier nonReentrantView() {
-        _nonReentrantBeforeView();
+    modifier onlyMinter() {
+        require(msg.sender == minter, "Only minter can call");
         _;
     }
 
-    function _nonReentrantBeforeView() private view {
-        if (_reentrancyGuardEntered()) {
-            revert ReentrancyGuardReentrantCall();
-        }
+    constructor() ERC20("Staked ETH", "stETH") Ownable(msg.sender) {
+        lastRebaseTime = block.timestamp;
+        deployTime = block.timestamp;
     }
 
-    function _nonReentrantBefore() private {
-        // On the first call to nonReentrant, _status will be NOT_ENTERED
-        _nonReentrantBeforeView();
-
-        // Any calls to nonReentrant after this point will fail
-        _reentrancyGuardStorageSlot().getUint256Slot().value = ENTERED;
+    function setMinter(address _minter) external onlyOwner {
+        minter = _minter;
+        emit MinterSet(_minter);
     }
 
-    function _nonReentrantAfter() private {
-        // By storing the original value once again, a refund is triggered (see
-        // https://eips.ethereum.org/EIPS/eip-2200)
-        _reentrancyGuardStorageSlot().getUint256Slot().value = NOT_ENTERED;
-    }
-
-    /**
-     * @dev Returns true if the reentrancy guard is currently set to "entered", which indicates there is a
-     * `nonReentrant` function in the call stack.
-     */
-    function _reentrancyGuardEntered() internal view returns (bool) {
-        return _reentrancyGuardStorageSlot().getUint256Slot().value == ENTERED;
-    }
-
-    function _reentrancyGuardStorageSlot() internal pure virtual returns (bytes32) {
-        return REENTRANCY_GUARD_STORAGE;
-    }
-}
-
-
-// File contracts/NilToken.sol
-
-// Original license: SPDX_License_Identifier: MIT
-pragma solidity ^0.8.28;
-contract NilToken is ERC20, Ownable {
-    address public vault;
-
-    event VaultSet(address indexed vault);
-
-    modifier onlyVault() {
-        require(msg.sender == vault, "Only vault can call");
-        _;
-    }
-
-    constructor() ERC20("Nil Token", "NIL") Ownable(msg.sender) {}
-
-    function setVault(address _vault) external onlyOwner {
-        require(vault == address(0), "Vault already set");
-        require(_vault != address(0), "Invalid vault address");
-        vault = _vault;
-        emit VaultSet(_vault);
-    }
-
-    function mint(address to, uint256 amount) external onlyVault {
+    function mint(address to, uint256 amount) external onlyMinter {
         _mint(to, amount);
     }
 
-    function burn(address from, uint256 amount) external onlyVault {
+    function burn(address from, uint256 amount) external onlyMinter {
         _burn(from, amount);
     }
-}
 
-
-// File contracts/NilVault.sol
-
-// Original license: SPDX_License_Identifier: MIT
-pragma solidity ^0.8.28;
-interface ILido {
-    function submit(address referral) external payable returns (uint256);
-}
-
-interface IStETH {
-    function transfer(address to, uint256 amount) external returns (bool);
-    function balanceOf(address account) external view returns (uint256);
-    function getExchangeRate() external view returns (uint256);
-}
-
-contract NilVault is ReentrancyGuard, Ownable {
-    NilToken public nilToken;
-    ILido public lido;
-    IStETH public stETH;
-    uint256 public constant COLLATERAL_RATIO = 150;
-
-    mapping(address => uint256) public collateral;
-    mapping(address => uint256) public debt;
-    mapping(address => uint256) public depositedETH;
-
-    uint256 public totalETHLocked;
-    uint256 public totalNILMinted;
-    uint256 public totalUsers;
-    uint256 public totalStETHHeld;
-
-    event Deposited(address indexed user, uint256 ethAmount, uint256 stEthReceived, uint256 nilAmount);
-    event Redeemed(address indexed user, uint256 nilAmount, uint256 stEthReturned);
-
-    constructor(address _nilToken, address _lido, address _stETH) Ownable(msg.sender) {
-        nilToken = NilToken(_nilToken);
-        lido = ILido(_lido);
-        stETH = IStETH(_stETH);
-    }
-
-    function deposit() external payable nonReentrant {
-        require(msg.value > 0, "Amount must be greater than 0");
-
-        uint256 stEthReceived = lido.submit{value: msg.value}(address(0));
-        uint256 nilAmount = (stEthReceived * 100) / COLLATERAL_RATIO;
-
-        if (collateral[msg.sender] == 0) {
-            totalUsers++;
+    function rebase() external {
+        uint256 daysElapsed = (block.timestamp - lastRebaseTime) / 1 days;
+        if (daysElapsed > 0) {
+            uint256 currentSupply = totalSupply();
+            uint256 newSupply = currentSupply
+                * (YIELD_PRECISION + DAILY_YIELD * daysElapsed)
+                / YIELD_PRECISION;
+            uint256 mintAmount = newSupply - currentSupply;
+            if (mintAmount > 0) {
+                _mint(address(this), mintAmount);
+            }
+            lastRebaseTime = block.timestamp;
+            emit Rebase(newSupply);
         }
-
-        depositedETH[msg.sender] += msg.value;
-        collateral[msg.sender] += stEthReceived;
-        debt[msg.sender] += nilAmount;
-        totalETHLocked += msg.value;
-        totalStETHHeld += stEthReceived;
-        totalNILMinted += nilAmount;
-
-        nilToken.mint(msg.sender, nilAmount);
-
-        emit Deposited(msg.sender, msg.value, stEthReceived, nilAmount);
     }
 
-    function redeem(uint256 nilAmount) external nonReentrant {
-        require(nilAmount > 0, "Amount must be greater than 0");
-        require(debt[msg.sender] >= nilAmount, "Insufficient NIL debt");
-
-        uint256 stEthToReturn = (nilAmount * COLLATERAL_RATIO) / 100;
-        require(collateral[msg.sender] >= stEthToReturn, "Insufficient collateral");
-
-        collateral[msg.sender] -= stEthToReturn;
-        debt[msg.sender] -= nilAmount;
-        totalStETHHeld -= stEthToReturn;
-        totalNILMinted -= nilAmount;
-
-        if (collateral[msg.sender] == 0) {
-            totalUsers--;
-        }
-
-        nilToken.burn(msg.sender, nilAmount);
-
-        require(stETH.transfer(msg.sender, stEthToReturn), "stETH transfer failed");
-
-        emit Redeemed(msg.sender, nilAmount, stEthToReturn);
-    }
-
-    function getPosition(
-        address user
-    ) external view returns (uint256, uint256, uint256) {
-        return (collateral[user], debt[user], depositedETH[user]);
-    }
-
-    function getStETHValue(address user) external view returns (uint256) {
-        uint256 rate = stETH.getExchangeRate();
-        return (collateral[user] * rate) / 1e18;
-    }
-
-    function getStats() external view returns (uint256, uint256, uint256, uint256) {
-        return (totalETHLocked, totalNILMinted, totalUsers, totalStETHHeld);
+    function getExchangeRate() external view returns (uint256) {
+        uint256 daysSinceDeployment = (block.timestamp - deployTime) / 1 days;
+        return 1e18 + (daysSinceDeployment * DAILY_YIELD * 1e18 / YIELD_PRECISION);
     }
 }
-

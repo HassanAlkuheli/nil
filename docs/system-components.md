@@ -5,6 +5,7 @@
 ### NilStETH
 - **Type:** ERC-20 (OpenZeppelin) + Ownable
 - **Purpose:** Represents staked ETH with a time-based yield mechanism
+- **Source:** `contracts/contracts/staking/NilStETH.sol`
 - **Key state:** `minter`, `deployTime`, `lastRebaseTime`
 - **Yield model:** `DAILY_YIELD = 11` / `YIELD_PRECISION = 100000` → ~0.011%/day ≈ 4% APY
 - `getExchangeRate()` — increases linearly from 1e18 based on days since deployment
@@ -13,6 +14,7 @@
 
 ### NilLido
 - **Type:** Staking gateway
+- **Source:** `contracts/contracts/staking/NilLido.sol`
 - **Purpose:** Accepts ETH deposits and mints stETH to the caller
 - **Key state:** `stETH` (NilStETH address), `totalStaked`
 - `submit(referral)` — payable, mints stETH 1:1 at day 0, stores ETH
@@ -20,6 +22,7 @@
 
 ### NilToken
 - **Type:** ERC-20 (OpenZeppelin) + Ownable
+- **Source:** `contracts/contracts/NilToken.sol`
 - **Purpose:** Protocol's synthetic stablecoin (1 NIL ≈ $1)
 - **Key state:** `vault` (authorized minter/burner)
 - `setVault()` — one-time binding, cannot be changed after set
@@ -27,6 +30,7 @@
 
 ### NilVault
 - **Type:** Core protocol contract (ReentrancyGuard + Ownable)
+- **Source:** `contracts/contracts/NilVault.sol`
 - **Purpose:** Manages deposits, collateral, debt, and redemptions
 - **Key state:** `collateral`, `debt`, `depositedETH` (per user), `totalETHLocked`, `totalStETHHeld`, `totalNILMinted`, `totalUsers`
 - `deposit()` — routes ETH → NilLido → stores stETH → mints NIL at `stETH * 100 / 150`

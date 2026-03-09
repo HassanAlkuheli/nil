@@ -35,12 +35,12 @@ A full-stack DeFi collateral vault protocol on Arbitrum Sepolia with Lido-style 
 
 | Contract  | Address |
 |-----------|---------|
-| NilStETH  | `0xb2A384fDe9F7c8013D3952D53Cc9D258C0BB411a` |
-| NilLido   | `0x58F649422BFcFfb15Cf01373a7221b51dcE48E1d` |
-| NilToken  | `0x15aC95865e4f046fe5DFAEA8759F11Fe81b9b8a8` |
-| NilVault  | `0x268b38c7903EF2e15cDF07BA748d918B5343aff6` |
+| NilStETH  | `0xEf5b5D6Ec354C4c4E1394C6827688f34c0b721Fe` |
+| NilLido   | `0xcE570FA7C5f5AeaD8239ee3a65179D8E6d3424fd` |
+| NilToken  | `0xa2D009B832CdD62d3603F47eF7fB7a735412884D` |
+| NilVault  | `0x30d3cF643cB5db836FfCCF5999CBDe0Ed1b4DfD4` |
 
-> View on [Arbiscan](https://sepolia.arbiscan.io/address/0x268b38c7903EF2e15cDF07BA748d918B5343aff6)
+> View on [Arbiscan](https://sepolia.arbiscan.io/address/0x30d3cF643cB5db836FfCCF5999CBDe0Ed1b4DfD4)
 
 ## Tech Stack
 

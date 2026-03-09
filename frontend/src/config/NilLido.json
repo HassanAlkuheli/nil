@@ -22,31 +22,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "ethAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "stEthAmount",
+        "name": "amount",
         "type": "uint256"
       }
     ],
     "name": "Submitted",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "deployTime",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [],
@@ -105,5 +86,9 @@
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]
