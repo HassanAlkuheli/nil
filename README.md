@@ -1,4 +1,5 @@
 # ∅ Nil Protocol
+<img width="1919" height="862" alt="Screenshot_4" src="https://github.com/user-attachments/assets/ba0a36dd-d17c-4d9c-b77c-01f2b8f28e1b" />
 
 **Everything starts from nil.**
 
